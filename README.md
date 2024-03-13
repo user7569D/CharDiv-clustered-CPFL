@@ -25,7 +25,7 @@ The codes include training of **Fine-tuned ASR** $W_0^G$, **K-means model** $KM$
    * Important arguments
       - `FL_STAGE`: set to 3
       - `training_type`: only 1 (supervised) supported
-      - check the clustering metric in sections [here](./src/federated_main.py#L157 "link") and [here](./src/federated_main.py#L219 "link")
+      - check the clustering metric in sections [here](./src/federated_main.py#L157) and [here](./src/federated_main.py#L219)
 
 3. Perform CPFL, resulting in $K$ cluster-specific models
    * important arguments</summary>
