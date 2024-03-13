@@ -11,7 +11,7 @@ where
 * `path`: name of the file for the sample that ends with ".wav" and contains information for ID and the position (PAR for participant or INV for investigator) of the speaker
 * `sentence`: ground truth transcription
   
-A dictionary mapping  speaker ID to dementia label is also needed for analysis on separate groups of people. Generate the dictionary and assign the path to `path2_ADReSS_dict` [here](./src/utils.py#L81).
+A dictionary mapping  speaker ID to dementia label is also needed for analysis on separate groups of people. Generate the dictionary and assign the path to `path2_ADReSS_dict` [here](https://github.com/user7569D/CharDiv-clustered-CPFL/blob/main/src/utils.py#L81).
 
 ## Training by `bash run.sh`
 The codes include training of **Fine-tuned ASR** $W_0^G$, **K-means model** $KM$, and $K$ cluster-specific models using CPFL.
@@ -25,7 +25,7 @@ The codes include training of **Fine-tuned ASR** $W_0^G$, **K-means model** $KM$
    * Important arguments
       - `FL_STAGE`: set to 3
       - `training_type`: only 1 (supervised) supported
-      - check the clustering metric in sections [here](./src/federated_main.py#L157) and [here](./src/federated_main.py#L219)
+      - check the clustering metric in sections [here](https://github.com/user7569D/CharDiv-clustered-CPFL/blob/main/src/federated_main.py#L157) and [here](https://github.com/user7569D/CharDiv-clustered-CPFL/blob/main/src/federated_main.py#L219)
 
 3. Perform CPFL, resulting in $K$ cluster-specific models
    * important arguments</summary>
