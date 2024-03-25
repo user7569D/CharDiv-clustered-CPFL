@@ -206,7 +206,66 @@ from typing import TYPE_CHECKING, Any, Callable, Dict, List, Optional, Tuple, Un
 import Levenshtein
 from jiwer import transforms as tr
 from jiwer.transformations import wer_default, wer_standardize, cer_default_transform
-from detail_wer import _preprocess
+
+from itertools import chain
+def _preprocess(
+    truth: List[str],
+    hypothesis: List[str],
+    truth_transform: Union[tr.Compose, tr.AbstractTransform],
+    hypothesis_transform: Union[tr.Compose, tr.AbstractTransform],
+) -> Tuple[List[str], List[str]]:
+    """
+    Pre-process the truth and hypothesis into a form such that the Levenshtein
+    library can compute the edit operations.can handle.
+    :param truth: the ground-truth sentence(s) as a string or list of strings
+    :param hypothesis: the hypothesis sentence(s) as a string or list of strings
+    :param truth_transform: the transformation to apply on the truths input
+    :param hypothesis_transform: the transformation to apply on the hypothesis input
+    :return: the preprocessed truth and hypothesis
+    """
+    # Apply transforms. The transforms should collapses input to a list of list of words
+    transformed_truth = truth_transform(truth)
+    transformed_hypothesis = hypothesis_transform(hypothesis)
+
+    # raise an error if the ground truth is empty or the output
+    # is not a list of list of strings
+    if len(transformed_truth) != len(transformed_hypothesis):
+        raise ValueError(
+            "number of ground truth inputs ({}) and hypothesis inputs ({}) must match.".format(
+                len(transformed_truth), len(transformed_hypothesis)
+            )
+        )
+    if not _is_list_of_list_of_strings(transformed_truth, require_non_empty_lists=True):
+        raise ValueError(
+            "truth should be a list of list of strings after transform which are non-empty"
+        )
+    if not _is_list_of_list_of_strings(
+        transformed_hypothesis, require_non_empty_lists=False
+    ):
+        raise ValueError(
+            "hypothesis should be a list of list of strings after transform"
+        )
+
+    # tokenize each word into an integer
+    vocabulary = set(chain(*transformed_truth, *transformed_hypothesis))
+
+    if "" in vocabulary:
+        raise ValueError(
+            "Empty strings cannot be a word. "
+            "Please ensure that the given transform removes empty strings."
+        )
+
+    word2char = dict(zip(vocabulary, range(len(vocabulary))))
+
+    truth_chars = [
+        "".join([chr(word2char[w]) for w in sentence]) for sentence in transformed_truth
+    ]
+    hypothesis_chars = [
+        "".join([chr(word2char[w]) for w in sentence])
+        for sentence in transformed_hypothesis
+    ]
+
+    return truth_chars, hypothesis_chars
 
 def _get_operation_counts(
     source_string: str, destination_string: str
