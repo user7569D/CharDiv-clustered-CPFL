@@ -208,6 +208,23 @@ from jiwer import transforms as tr
 from jiwer.transformations import wer_default, wer_standardize, cer_default_transform
 
 from itertools import chain
+
+def _is_list_of_list_of_strings(x: Any, require_non_empty_lists: bool):
+    if not isinstance(x, list):
+        return False
+
+    for e in x:
+        if not isinstance(e, list):
+            return False
+
+        if require_non_empty_lists and len(e) == 0:
+            return False
+
+        if not all([isinstance(s, str) for s in e]):
+            return False
+
+    return True
+    
 def _preprocess(
     truth: List[str],
     hypothesis: List[str],
