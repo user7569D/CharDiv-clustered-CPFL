@@ -4,7 +4,7 @@ This repo supports the paper "A Cluster-based Personalized Federated Learning St
 The cluster-based personalized federated learning (**CPFL**) strategy groups samples with similar character diversity (**CharDiv**) into cluster using K-means model $KM$, and assigns clients to train these samples federally, creating a cluster-specific model for decoding others within the same cluster.
 
 ## Environment
-Use `pip -r requirements.txt` to install the same libraries
+Use `pip install -r requirements.txt` to install the same libraries
 
 ## Data preparation and preprocessing
 We use [ADReSS challenge dataset](https://dementia.talkbank.org/ADReSS-2020/) as the training and testing sets. You have to join as a DementiaBank member to gain access to this dataset. Our input for ASR will be in utterance, segmented from the given session file. The information of each sample will be record in `train.csv` and `test.csv` with the following structure:
